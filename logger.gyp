@@ -35,67 +35,70 @@
       },
     },
     'include_dirs': [
-                     './src/',
-                     '/usr/local/include/',
-                     '/usr/include/',
-                     ],
+                      './src/',
+                      './deps_/proto/',
+                      './deps/utils/src/'
+                      '/usr/local/include/',
+                      '/usr/include/',
+                    ],
     'cflags': [
-               '-Wall',
-               '-fPIC',
-               '-std=c++11',
-               ],
-    'defines':  [
+                '-Wall',
+                '-fPIC',
+                '-std=c++11',
+              ],
+    'defines': [
                  'PIC',
                  'STD_CXX_11',
                  '_THREAD_SAFE',
-                 ],
+                ],
   },
   'conditions': [
-                 ['OS=="mac"', {
-                  'defines':            [ 'LOGGER_MAC_BUILD', ],
-                  'xcode_settings':  {
-                  'GCC_ENABLE_CPP_EXCEPTIONS':    'YES',
-                  'OTHER_CFLAGS':               [ '-std=c++11', ],
-                  },
-                  },
-                  ],
-                 ['OS=="linux"', {
-                  'defines':            [ 'LOGGER_LINUX_BUILD', ],
-                  'link_settings': {
-                  'ldflags':   [ '-Wl,--no-as-needed', ],
-                  'libraries': [ '-lrt', ],
-                  },
-                  },
-                  ],
-                 ],
+    ['OS=="mac"', {
+     'defines':            [ 'LOGGER_MAC_BUILD', ],
+     'xcode_settings':  {
+       'GCC_ENABLE_CPP_EXCEPTIONS':    'YES',
+       'OTHER_CFLAGS':               [ '-std=c++11', ],
+     },},],
+    ['OS=="linux"', {
+     'defines':            [ 'LOGGER_LINUX_BUILD', ],
+     'link_settings': {
+       'ldflags':   [ '-Wl,--no-as-needed', ],
+       'libraries': [ '-lrt', ],
+     },},],
+  ],
   'targets' : [
-               {
-               'conditions': [
-                              ['OS=="mac"', {
-                               'variables':  { 'logger_root':  '<!(pwd)/../', },
-                               'xcode_settings':  {
-                               'GCC_ENABLE_CPP_EXCEPTIONS':    'YES',
-                               'OTHER_CFLAGS':               [ '-std=c++11', ],
-                               },
-                               'direct_dependent_settings': {
-                               'include_dirs': [ '<(logger_root)/', ],
-                               },},],
-                              ['OS=="linux"', {
-                               'direct_dependent_settings': {
-                               'include_dirs':       [ '.', ],
-                               },},],
-                              ],
-               'target_name':                   'logger',
-               'type':                          'static_library',
-               'defines':                     [ 'USING_LOGGER_LIB',  ],
-               'sources':                     [ '<@(logger_sources)', ],
-               },
-               {
-               'target_name':       'logger_test',
-               'type':              'executable',
-               'dependencies':  [ 'logger', 'deps_/gtest/gyp/gtest.gyp:gtest_lib', ],
-               'include_dirs':  [ './deps_/gtest/include/', ],
-               'sources':       [ 'test/logger_test.cc', ],
-               },
-               ],
+    {
+      'conditions': [
+        ['OS=="mac"', {
+         'variables':  { 'logger_root':  '<!(pwd)/../', },
+         'xcode_settings':  {
+           'GCC_ENABLE_CPP_EXCEPTIONS':    'YES',
+           'OTHER_CFLAGS':               [ '-std=c++11', ],
+         },
+         'direct_dependent_settings': {
+           'include_dirs': [ '<(logger_root)/', ],
+        },},],
+        ['OS=="linux"', {
+         'direct_dependent_settings': {
+           'include_dirs':       [ '.', ],
+        },},],
+      ],
+      'target_name':                   'logger',
+      'type':                          'static_library',
+      'defines':                     [ 'USING_LOGGER_LIB',  ],
+      'sources':                     [ '<@(logger_sources)', ],
+    },
+    {
+      'target_name':       'logger_test',
+      'type':              'executable',
+      'dependencies':  [
+                          'logger',
+                          'deps_/gtest/gyp/gtest.gyp:gtest_lib',
+                          'deps_/utils/utils.gyp:utils',
+                          'deps_/proto/proto.gyp:*',
+                       ],
+      'include_dirs':  [ './deps_/gtest/include/', ],
+      'sources':       [ 'test/logger_test.cc', ],
+    },
+  ],
 }

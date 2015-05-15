@@ -14,6 +14,14 @@
                         'src/logger/variable.hh',
                         'src/logger.hh',
                       ],
+    'logger_includes': [
+                         './src/',
+                         './deps_/proto/',
+                         './deps_/utils/src/',
+                         './deps_/',
+                         '/usr/local/include/',
+                         '/usr/include/',
+                       ],
   },
   'target_defaults': {
     'default_configuration': 'Debug',
@@ -34,13 +42,7 @@
         },
       },
     },
-    'include_dirs': [
-                      './src/',
-                      './deps_/proto/',
-                      './deps/utils/src/'
-                      '/usr/local/include/',
-                      '/usr/include/',
-                    ],
+    'include_dirs': [ '<@(logger_includes)' ],
     'cflags': [
                 '-Wall',
                 '-fPIC',
@@ -83,10 +85,11 @@
            'include_dirs':       [ '.', ],
         },},],
       ],
-      'target_name':                   'logger',
-      'type':                          'static_library',
-      'defines':                     [ 'USING_LOGGER_LIB',  ],
-      'sources':                     [ '<@(logger_sources)', ],
+      'target_name':     'logger',
+      'type':            'static_library',
+      'defines':       [ 'USING_LOGGER_LIB',  ],
+      'include_dirs':  [ '<@(logger_includes)', ],
+      'sources':       [ '<@(logger_sources)', ],
     },
     {
       'target_name':       'logger_test',
@@ -97,7 +100,10 @@
                           'deps_/utils/utils.gyp:utils',
                           'deps_/proto/proto.gyp:*',
                        ],
-      'include_dirs':  [ './deps_/gtest/include/', ],
+      'include_dirs':  [
+                          './deps_/gtest/include/',
+                          '<@(logger_includes)',
+                       ],
       'sources':       [ 'test/logger_test.cc', ],
     },
   ],

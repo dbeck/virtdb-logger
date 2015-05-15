@@ -26,6 +26,8 @@ namespace virtdb { namespace logger {
     pb_record_(new interface::pb::LogRecord),
     pb_data_ptr_(nullptr)
   {
+    using namespace virtdb::utils;
+    
     prepare_record();
     
     {
@@ -35,7 +37,7 @@ namespace virtdb { namespace logger {
         auto data_array = pb_record_->mutable_data();
         pb_data_ptr_ = data_array->Add();
         pb_data_ptr_->set_headerseqno(record_->id());
-        pb_data_ptr_->set_elapsedmicrosec(util::relative_time::instance().get_usec());
+        pb_data_ptr_->set_elapsedmicrosec(relative_time::instance().get_usec());
         std::hash<std::thread::id> hash_fn;
         std::size_t thr_hash = hash_fn(std::this_thread::get_id());        
         pb_data_ptr_->set_threadid(static_cast<uint64_t>(thr_hash));

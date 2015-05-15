@@ -8,8 +8,8 @@
 #include <logger/process_info.hh>
 #include <logger/log_sink.hh>
 #include <logger/variable.hh>
-#include <util/value_type.hh>
-#include <util/relative_time.hh>
+#include <utils/relative_time.hh>
+#include <proto/value_type.hh>
 #include <iostream>
 #include <map>
 #include <mutex>
@@ -48,7 +48,7 @@ namespace virtdb { namespace logger {
                     interface::pb::LogData * pb_data)
       {
         auto pb_value = pb_data->add_values();
-        util::value_type<T>::set(*pb_value, val);
+        proto::value_type<T>::set(*pb_value, val);
       }
 
       template <typename T>
@@ -57,7 +57,7 @@ namespace virtdb { namespace logger {
       {
         auto pb_value = pb_data->add_values();
         typedef typename variable<T>::type var_type;
-        util::value_type<var_type>::set(*pb_value, *val.val_);
+        proto::value_type<var_type>::set(*pb_value, *val.val_);
       }
       
     public:
@@ -86,7 +86,7 @@ namespace virtdb { namespace logger {
           {
             pb_data_ptr_ = pb_record_->add_data();
             pb_data_ptr_->set_headerseqno(record_->id());
-            pb_data_ptr_->set_elapsedmicrosec(util::relative_time::instance().get_usec());
+            pb_data_ptr_->set_elapsedmicrosec(utils::relative_time::instance().get_usec());
             std::hash<std::thread::id> hash_fn;
             std::size_t thr_hash = hash_fn(std::this_thread::get_id());        
             pb_data_ptr_->set_threadid(static_cast<uint64_t>(thr_hash));

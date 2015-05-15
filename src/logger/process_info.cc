@@ -1,7 +1,7 @@
 #include <logger/process_info.hh>
 #include <logger/symbol_store.hh>
-#include <util/relative_time.hh>
-#include <util/net.hh>
+#include <utils/relative_time.hh>
+#include <utils/net.hh>
 #include <thread>
 #include <memory>
 #include <mutex>
@@ -39,7 +39,7 @@ namespace virtdb { namespace logger {
     _g_host_name_ = name;
   }
   
-  process_info::process_info() : started_at_(util::relative_time::instance().started_at())
+  process_info::process_info() : started_at_(utils::relative_time::instance().started_at())
   {
     using namespace std::chrono;
     time_t now = system_clock::to_time_t(system_clock::now());
@@ -86,14 +86,14 @@ namespace virtdb { namespace logger {
         }
         else
         {
-          util::net::string_vector my_ips{util::net::get_own_ips(VIRTDB_SUPPORTS_IPV6)};
+          utils::net::string_vector my_ips{utils::net::get_own_ips(VIRTDB_SUPPORTS_IPV6)};
           if( my_ips.size() > 0 )
           {
             _g_host_name_ = my_ips[0];
           }
           else
           {
-            std::string name{util::net::get_own_hostname()};
+            std::string name{utils::net::get_own_hostname()};
             if( !name.empty() )
             {
               _g_host_name_ = name;

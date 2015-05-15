@@ -4,7 +4,7 @@
 #include <logger/end_msg.hh>
 #include <logger/variable.hh>
 #include <logger/symbol_store.hh>
-#include <util/value_type.hh>
+#include <value_type.hh>
 #include <iostream>
 #include <memory>
 
